@@ -26,13 +26,17 @@ public class SmileComponent extends JComponent {
 	
 		g.setColor(Color.YELLOW);
 		g.fillOval(200, 100, 400, 400);
+		g.setColor(Color.green);
+		g.fillOval(390, 270, 40,30);
 		g.setColor(Color.BLUE);
 		g.fillOval(325, 200, 25, 25);
+		
 		
 		switch (count) {
 		case 0: {
 			g.fillOval(450, 200, 25, 25);
 			break;
+			
 		}
 		case 1: {
 			g.fillArc(450, 201, 25, 25, 0, 180);
@@ -76,6 +80,7 @@ public class SmileComponent extends JComponent {
 			g.fillArc(450, 200, 25, 25, 0, -180);
 			g.setColor(Color.YELLOW);
 			g.fillArc(450, 200, 25, 22, 0, -180);
+
 			break;
 		}
 		case 9: {
