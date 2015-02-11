@@ -16,6 +16,7 @@ public class Snake extends JFrame implements KeyListener{
 	 */
 	private static final long serialVersionUID = 1L;
 	private Container container;
+	private SnakeComponent component;
 	private ScheduledExecutorService executor;
 	public Snake(){
 		setSize(800,800);
@@ -23,13 +24,13 @@ public class Snake extends JFrame implements KeyListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		container= getContentPane();
 		executor = Executors.newScheduledThreadPool(1);
-		SnakeComponent component=new SnakeComponent();
+		component=new SnakeComponent();
 		component.addKeyListener(this);
 		component.setFocusable(true);
 		
 		Runnable paint = new Runnable() {
 			public void run() {
-			component.goRight();
+			//component.goRight();
 			container.repaint();
 			}
 		};
@@ -43,13 +44,16 @@ public class Snake extends JFrame implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		//component.goRight();
 	}
 	@Override
-	public void keyReleased(KeyEvent arg0) {
+	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		// 4 or left arrow then turn to left
 		//6 or right then turn to the right
+		if(e.getKeyCode()==KeyEvent.VK_RIGHT){
+			component.goRight();
+		}
 		
 	}
 	@Override
