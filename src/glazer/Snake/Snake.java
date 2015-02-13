@@ -54,6 +54,9 @@ public class Snake extends JFrame implements KeyListener{
 		if(e.getKeyCode()==KeyEvent.VK_RIGHT){
 			component.goRight();
 		}
+		else if(e.getKeyCode()==KeyEvent.VK_LEFT){
+			component.goLeft();
+		}
 		
 	}
 	@Override
