@@ -1,18 +1,19 @@
 package airplane;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,74 +22,65 @@ import javax.swing.border.BevelBorder;
 
 public class SideMap extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private JLabel mapImg;
+	private Image img;
 	private int zoom;
 	private String view;
-	private String path;
-	private Address2Thread load;
 	private String address;
 	private String address2;
-	private Airplane plane;
 
 	// menu
+	// TODO make feature menu work
+	@SuppressWarnings("unused")
 	private String feature;
 	private JMenu viewOptions;
 	private JMenuBar menu;
 	private JMenu featuresOptions;
-
-	// north cont
-	private JPanel northCont;
 	private JButton zoomout;
 	private JButton zoomin;
+	private Rain rain;
 
 	public SideMap() throws IOException {
 		setSize(300, 600);
 		setLayout(new BorderLayout());
 		setBorder(new BevelBorder(BevelBorder.LOWERED));
-		mapImg = new JLabel();
-		add(mapImg, BorderLayout.CENTER);
-		plane=new Airplane(20);
-		plane.setX(100);
-		plane.setY(100);
-		
-		// set up north Container
-		northCont = new JPanel(new FlowLayout());
-		// create and add zoom out button
-		zoomout = new JButton("-");
-		
-		// create and add zoom in button
-		zoomin = new JButton("+");
-		formatNorthCont();
-	//	add(northCont, BorderLayout.SOUTH);
 
-		zoom = 1; // 0-21 disable + button is more
-		zoomout.setEnabled(false);
+		// create and add zoom buttons
+		zoomout = new JButton("-");
+		zoomin = new JButton("+");
+		zoomout.addActionListener(zoomoutListen);
+		zoomin.addActionListener(zoominListen);
+
+		zoom = 2; // 0-21 disable + button is more
 		address = "USA";
-		updateMap(address,address);
+		updateMap(address, address);
 		// create menu bar
 		featuresOptions = new JMenu("Features");
 		menu = new JMenuBar();
 		viewOptions = new JMenu("View");
 		setUpMenu();
-		add(menu,BorderLayout.NORTH);
+		add(menu, BorderLayout.NORTH);
+		rain =new Rain();
 	}
 
-	public JLabel getMapLabel() {
-		return this.mapImg;
-	}
-
-	public void paintComponent(Graphics g){
+	@Override
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		plane.drawAirplane(g);
-		//g.fillRect(10, 20, 100, 100);
+		try {
+			g.drawImage(img, 0, 0, 300, 600, null);
+			g.drawImage(ImageIO.read(getClass().getResource("airplane.jpg")), 150, 300, 20, 20, null);
+			rain.generateRain(g);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+
 	public void setUpMenu() {
 		String[] viewNames = { "Satellite", "Roadmap", "Hybrid", "Terrain" };
 		String[] featuresNames = { "Roads", "Landscape", "Transit", "transit.station.airports", "pio.school" };
-		JCheckBoxMenuItem[] features = new JCheckBoxMenuItem[5];
-		JMenuItem[] views = new JMenuItem[4];
+		JCheckBoxMenuItem[] features = new JCheckBoxMenuItem[featuresNames.length];
+		JMenuItem[] views = new JMenuItem[viewNames.length];
 		featuresOptions.setToolTipText("Features to display");
-		path = "40.737102,-73.990318|40.749825,-73.987963";
 		feature = "transit.station.airports";
 
 		for (int i = 0; i < features.length; i++) {
@@ -114,12 +106,17 @@ public class SideMap extends JPanel {
 		menu.add(zoomin);
 	}
 
-	public void formatNorthCont() {
-		zoomout.addActionListener(zoomoutListen);
-		northCont.add(zoomout);
-
-		zoomin.addActionListener(zoominListen);
-		northCont.add(zoomin);
+	public void loadImg() throws MalformedURLException {
+		String zooms = "";
+		if (zoom != 0) {
+			zooms = "&zoom=" + zoom;
+		}
+		URL url = new URL("https://maps.googleapis.com/maps/api/staticmap?size=300x600&path=color:0x0000ff|weight:5|"
+				+ address + "|" + address2 + "&maptype=" + view + "&markers=size:mid%7Ccolor:red%7C" + address2 + "%7C"
+				+ address + zooms);
+		//FIXME should be in separate thread
+		img = new ImageIcon(url).getImage();
+		//new ImgDownloadThread(url, new JLabel()).start();
 	}
 
 	public void updateFeature(String feature) throws MalformedURLException {
@@ -132,17 +129,11 @@ public class SideMap extends JPanel {
 		loadImg();
 	}
 
-	public void loadImg() throws MalformedURLException {
-		new Address2Thread(address, address2, zoom, view, mapImg).start();
-		/*
-		 * new ImgDownloadThread(new
-		 * URL("https://maps.googleapis.com/maps/api/staticmap?center=jfk&zoom="
-		 * + zoom +
-		 * "&size=400x400&maptype="+view+"&path=color:0x0000ff|weight:5|"
-		 * +path+"&style=feature:"
-		 * +feature+"%7Celement:geometry%7Cvisibility:simplified%7Ccolor:0xc280e9"
-		 * ), mapImg).start();
-		 */
+	public void updateMap(String address, String address2) throws IOException {
+		this.address = address;
+		this.address2 = address2;
+		zoom = 0;
+		loadImg();
 	}
 
 	ActionListener zoominListen = new ActionListener() {
@@ -158,7 +149,8 @@ public class SideMap extends JPanel {
 
 			try {
 				loadImg();
-			} catch (MalformedURLException e) {
+			}
+			catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -176,7 +168,8 @@ public class SideMap extends JPanel {
 			}
 			try {
 				loadImg();
-			} catch (MalformedURLException e) {
+			}
+			catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -189,8 +182,9 @@ public class SideMap extends JPanel {
 			String feature = (String) item.getText();
 			try {
 				updateFeature(feature);
-				
-			} catch (MalformedURLException e1) {
+
+			}
+			catch (MalformedURLException e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -203,15 +197,10 @@ public class SideMap extends JPanel {
 			String view = (String) item.getText();
 			try {
 				updateView(view);
-			} catch (MalformedURLException e1) {
+			}
+			catch (MalformedURLException e1) {
 				e1.printStackTrace();
 			}
 		}
 	};
-
-	public void updateMap(String address, String address2) throws IOException {
-		this.address=address;
-		this.address2=address2;
-		new Address2Thread(address,address2,view,mapImg).start();
-	}
 }

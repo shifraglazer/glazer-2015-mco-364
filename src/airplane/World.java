@@ -3,7 +3,6 @@ package airplane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -11,20 +10,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URLEncoder;
 
 import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class World extends JFrame {
@@ -41,14 +35,9 @@ public class World extends JFrame {
 	private WeatherBox currWeather;
 
 	// menu
-	private String view;
-	private String feature;
 	private JMenu viewOptions;
 	private JMenuBar menu;
 	private JMenu featuresOptions;
-
-	// south cont
-	private JPanel southCont;
 	private JButton go;
 	private JTextField location;
 	private JTextField destination;
@@ -67,12 +56,15 @@ public class World extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// create menu bar
-		featuresOptions = new JMenu("Features");
 		menu = new JMenuBar();
-		viewOptions = new JMenu("View");
-		// TODO move jmenu so part of sidemap, not world
+		featuresOptions = new JMenu("Options1");
+		viewOptions = new JMenu("Options2");
+		location = new JTextField("Departure");
+		destination = new JTextField("Destination");
+		go = new JButton("Go!");
 		setUpMenu();
-		setJMenuBar(menu);
+		//don't want setJMenuBar(menu); because by default it adds it to north
+		add(menu, BorderLayout.SOUTH);
 
 		// create the three panels and set up their location on the screen
 		address = "USA";
@@ -90,56 +82,30 @@ public class World extends JFrame {
 
 		weather = new WeatherCont();
 		weather.setSize(new Dimension((int) getWidth() / 4, getHeight()));
-		depWeather = new WeatherBox("Departure", "4.5", "57.56");
+		depWeather = new WeatherBox("Departure", "74.0059", "40.7127");
 		weather.add(depWeather);
-		desWeather = new WeatherBox("Destination", "4.5", "57.56");
+		desWeather = new WeatherBox("Destination", "0", "0");
 		weather.add(desWeather);
-		currWeather = new WeatherBox("Current", "7.5", "5.56");
+		currWeather = new WeatherBox("Current", "40.7127", "74.0059");
 		weather.add(currWeather);
-
 		// weather.setLocation(locx + 550, locy);
 		add(weather, BorderLayout.EAST);
 
-		// set up south Container
-		southCont = new JPanel();
-		add(southCont, BorderLayout.SOUTH);
-		southCont.setLayout(new FlowLayout());
-		
-		location = new JTextField("Departure");
-		location.setColumns(20);
-		location.setSelectedTextColor(Color.BLUE);
-		destination = new JTextField("Destination");
-		destination.setSelectedTextColor(Color.BLUE);
-		destination.setColumns(20);
-		go = new JButton("Go!");
-		southCont.add(location);
-		southCont.add(Box.createHorizontalGlue());
-		southCont.add(destination);
-		go.addActionListener(click);
-		southCont.add(go);
-		formatSouthCont();
-		
-		menu.add(location);
-		menu.add(destination);
-		menu.add(go);
-		Image i= ImageIO.read(getClass().getResource("airplane.jpg"));
+		// create window icon (only visible on mac when minimize window)
+		Image i = ImageIO.read(getClass().getResource("airplane.jpg"));
 		this.setIconImage(i);
+
 		setVisible(true);
 	}
 
-	public void formatSouthCont() {
-		
-
-	}
-
+	//FIXME unused
 	public void setUpMenu() {
-		String[] viewNames = { "Satellite", "Roadmap", "Hybrid", "Terrain" };
-		String[] featuresNames = { "Roads", "Landscape", "Transit", "transit.station.airports", "pio.school" };
+		String[] viewNames = { "A", "B", "C", "D" };
+		String[] featuresNames = { "A", "B", "C", "D", "E" };
+		//TODO should not be instantiated out of the constructor
 		JCheckBoxMenuItem[] features = new JCheckBoxMenuItem[5];
 		JMenuItem[] views = new JMenuItem[4];
 		featuresOptions.setToolTipText("Features to display");
-
-		feature = "transit.station.airports";
 
 		for (int i = 0; i < features.length; i++) {
 			features[i] = new JCheckBoxMenuItem(featuresNames[i]);
@@ -158,9 +124,16 @@ public class World extends JFrame {
 		menu.add(featuresOptions);
 		// viewOptions.setSelectedIndex(2);
 		viewOptions.setToolTipText("Map View");
-		// FIXME view line wasn't doing anything
-		// view = "Hybrid";
 		menu.add(viewOptions);
+
+		location.setColumns(20);
+		location.setSelectedTextColor(Color.BLUE);
+		destination.setSelectedTextColor(Color.BLUE);
+		destination.setColumns(20);
+		go.addActionListener(click);
+		menu.add(location);
+		menu.add(destination);
+		menu.add(go);
 	}
 
 	public void setAddress(String address, String address2) throws UnsupportedEncodingException {
@@ -179,14 +152,14 @@ public class World extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			try {
 				setAddress(location.getText(), destination.getText());
-				//Address2Thread thread = new Address2Thread(address, address2, view, sideMap);
-				//thread.start();
+				// Address2Thread thread = new Address2Thread(address, address2, view, sideMap);
+				// thread.start();
 				location.setText("Departure");
 				destination.setText("Destination");
 				depWeather.update(address);
 				desWeather.update(address2);
 				centerMap.updateMap(address);
-				sideMap.updateMap(address,address2);
+				sideMap.updateMap(address, address2);
 			}
 			catch (IOException e) {
 				e.printStackTrace();
@@ -195,50 +168,36 @@ public class World extends JFrame {
 		}
 	};
 
+	//FIXME unused
 	ActionListener featuresView = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 			String feature = (String) item.getText();
-			try {
-				updateFeature(feature);
-			}
-			catch (MalformedURLException e1) {
-				e1.printStackTrace();
-			}
+			feature.toLowerCase();
 		}
 	};
 
+	//FIXME unused
 	ActionListener mapView = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JMenuItem item = (JMenuItem) e.getSource();
 			String view = (String) item.getText();
-			try {
-				updateView(view);
-			}
-			catch (MalformedURLException e1) {
-				e1.printStackTrace();
-			}
+			view.toLowerCase();
 		}
 	};
 
-	public void updateFeature(String feature) throws MalformedURLException {
-		this.feature = feature.toLowerCase();
-	}
-
-	public void updateView(String view) throws MalformedURLException {
-		this.view = view.toLowerCase();
-	}
-	public void paintComponent(Graphics g){
+	public void paintComponent(Graphics g) {
 		super.paintComponents(g);
 		sideMap.paintComponent(g);
 	}
+
 	public void update() throws IOException {
-		//TODO dotn want to update unless the destination changes or zoom in/out
-		//sideMap.updateMap(address, address2);
+		// TODO dotn want to update unless the destination changes or zoom in/out
+		// sideMap.updateMap(address, address2);
 		// TODO send in instead lat, log / address of plane
-		//centerMap.updateMap(address);
-		//currWeather.update(address2);
+		// centerMap.updateMap(address);
+		// currWeather.update(address2);
 	}
 }

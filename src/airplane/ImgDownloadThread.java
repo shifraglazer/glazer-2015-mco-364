@@ -8,21 +8,15 @@ import javax.swing.JLabel;
 public class ImgDownloadThread extends Thread {
 	private URL url;
 	private JLabel label;
-
-	public ImgDownloadThread(URL url, JLabel label) {
+	
+	public ImgDownloadThread(URL url, JLabel currentWeather) {
 		this.url = url;
-		this.label = label;
+		this.label = currentWeather;
 	}
 
 	@Override
 	public void run() {
-		// TODO remove
-		// FIXME whatever
-		System.out.println(url);
-		ImageIcon icon;
-
-		icon = new ImageIcon(url);
+		ImageIcon icon = new ImageIcon(url);
 		label.setIcon(icon);
-
 	}
 }

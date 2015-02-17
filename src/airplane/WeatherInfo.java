@@ -1,11 +1,11 @@
 package airplane;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -23,7 +23,7 @@ public class WeatherInfo extends Container {
 	private JLabel maxLabel;
 	
 	public WeatherInfo(String lat, String log) throws MalformedURLException {
-		setLayout(new BorderLayout());
+		setLayout(new GridLayout(3, 1));
 		
 		currentCont = new Container();
 		minMaxCont = new Container();
@@ -40,7 +40,7 @@ public class WeatherInfo extends Container {
 	}
 	
 	public WeatherInfo(String address) throws MalformedURLException {
-		setLayout(new BorderLayout());
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		currentCont = new Container();
 		minMaxCont = new Container();
@@ -67,7 +67,6 @@ public class WeatherInfo extends Container {
 		// update size of main JFrame based on how many weather conditions exist at the moment
 		// FIXME really shouldn't change the size - should instead have a set size with scrollbar if
 		// needed
-		setSize(300, 110 + 50 * weathers.length);
 
 		currentCont.setLayout(new GridBagLayout());
 
@@ -93,7 +92,7 @@ public class WeatherInfo extends Container {
 
 		currentCont.add(currentWeather);
 		
-		add(currentCont, BorderLayout.NORTH);
+		add(currentCont);
 	}
 
 	public void addMinMax(WeatherNow now) {
@@ -112,7 +111,7 @@ public class WeatherInfo extends Container {
 		minMaxCont.add(maxLabel);
 
 		// add minMax container to the center of the main frame
-		add(minMaxCont, BorderLayout.CENTER);
+		add(minMaxCont);
 	}
 
 	public void listAllCurrentConditions() throws MalformedURLException {
@@ -134,6 +133,7 @@ public class WeatherInfo extends Container {
 		}
 
 		// add the weather condition container to the bottom of the main frame
-		add(conditionsCont, BorderLayout.SOUTH);
+		//FIXME the conditions override high/low
+		add(conditionsCont);
 	}
 }
