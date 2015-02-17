@@ -2,46 +2,43 @@ package glazer.Snake;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
+import java.io.IOException;
 
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 
-public class Food extends Image{
-
+public class Food {
 
 	
-	public Food(){
-		this.setImage(getClass().getResource("mouse.jpg"));
+	public Image getFood() {
+		return food;
+	}
+	private Image food;
+	private int x;
+	private int y;
+	private final int SIZE;
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	public Food( int size) throws IOException{
+		food=ImageIO.read(getClass().getResource("apple2.jpg"));
+		SIZE=size;
+		
 	}
 
-	@Override
-	public Graphics getGraphics() {
-		// TODO Auto-generated method stub
-		return null;
+	public void drawFood(Graphics g){
+		
+		g.drawImage(food, x, y, SIZE, SIZE, null);
+		//g.drawRect(x, y,SIZE, SIZE);
+		
 	}
-
-	@Override
-	public int getHeight(ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return 20;
-	}
-
-	@Override
-	public Object getProperty(String name, ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ImageProducer getSource() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getWidth(ImageObserver observer) {
-		// TODO Auto-generated method stub
-		return 20;
-	}
+	
 }
