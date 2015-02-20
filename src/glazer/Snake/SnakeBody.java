@@ -1,6 +1,7 @@
 package glazer.Snake;
 
 import java.awt.Graphics;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -30,7 +31,7 @@ public class SnakeBody {
 		 x = random.nextInt((width-SIZE)/20);
 		 y = random.nextInt((height-SIZE)/20);
 		}
-		while(x==0||y==0);
+		while(x<=1||y<=1);
 		System.out.println("snake x "+ x+ " y "+ y);
 		SnakeCell first = new SnakeCell(x*20, y*20, SIZE, SIZE,ARCSIZE);
 		snake.addFirst(first);
@@ -91,6 +92,8 @@ public class SnakeBody {
 		}
 		}
 		if(occupies(cell.getX(),cell.getY())){
+			BangSound sound=new BangSound();
+			sound.start();
 			bangSnake=true;
 		}
 		else{
@@ -98,7 +101,7 @@ public class SnakeBody {
 		snake.removeLast();
 		}
 	}
-	public void drawSnake(Graphics g) {	
+	public void drawSnake(Graphics g) throws IOException {	
 	
 		Iterator<SnakeCell> iter=snake.iterator();
 		if(direction.equals("Up")||direction.equals("Down")){
@@ -118,6 +121,8 @@ public class SnakeBody {
 		while(iter.hasNext()){
 			SnakeCell cell=iter.next();
 			if(cell.getX()==x&&cell.getY()==y){
+				BangSound sound=new BangSound();
+				sound.start();
 				return true;
 			}
 		}
@@ -133,6 +138,8 @@ public class SnakeBody {
 	public boolean bangWall() {
 		SnakeCell first=snake.getFirst();
 		if(first.getX()<0||first.getX()>width||first.getY()<0||first.getY()>height){
+			Bang2 sound=new Bang2();
+			sound.start();
 			return true;
 		}
 		return false;
@@ -140,5 +147,10 @@ public class SnakeBody {
 
 	public boolean bangSnake() {
 		return bangSnake;
+	}
+
+	public void setEating(boolean bool) {
+		snake.getFirst().setEating(bool);
+		
 	}
 }

@@ -40,6 +40,7 @@ public class Snake extends JFrame implements KeyListener {
 			public void run() {
 			
 				if(!gameOver){
+				
 				world.updateSnake(direction);
 				world.checkEat();
 				gameOver=world.checkGameOver();
@@ -65,6 +66,8 @@ public class Snake extends JFrame implements KeyListener {
 		try {
 			snake = new Snake();
 			snake.setVisible(true);
+			Music music=new Music();
+			music.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
