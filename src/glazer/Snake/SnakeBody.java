@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.Random;
 
 
@@ -68,7 +69,9 @@ public class SnakeBody {
 	
 	}
 
-
+	public void removeLast(){
+		snake.removeLast();
+	}
 	public void moveForward(String direction){
 		this.direction=direction;
 		SnakeCell cell=null;
@@ -98,7 +101,7 @@ public class SnakeBody {
 		}
 		else{
 		snake.addFirst(cell);
-		snake.removeLast();
+		//snake.removeLast();
 		}
 	}
 	public void drawSnake(Graphics g) throws IOException {	

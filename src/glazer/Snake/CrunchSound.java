@@ -16,6 +16,6 @@ public class CrunchSound extends Thread {
 		AudioClip click = Applet.newAudioClip(urlClick);
 		click.play();
 		Music music=new Music();
-		music.start();
+		//music.start();
 	}
 }

@@ -21,8 +21,10 @@ public class World extends JComponent {
 	private final int WIDTH;
 	private final int HEIGHT;
 	private final int ARCSIZE = 15;
+	private Music music;
+	
 
-	public World(int width, int height) throws IOException {
+	public World(int width, int height,Music music) throws IOException {
 
 		setMinimumSize(new Dimension(width, height));
 		setPreferredSize(new Dimension(width, height));
@@ -32,6 +34,8 @@ public class World extends JComponent {
 		food = new Food(SIZE);
 		snake = new SnakeBody(WIDTH, HEIGHT, SIZE, ARCSIZE);
 		plantFood();
+		this.music=music;
+	
 		
 	}
 
@@ -55,16 +59,21 @@ public class World extends JComponent {
 		snake.moveForward(direction);
 	}
 
-	public void checkEat() {
+	public void checkEat() throws InterruptedException {
 		if (snake.headAt(food.getX(), food.getY())) {
 			snake.setEating(true);
 			CrunchSound sound = new CrunchSound();
+			music.interrupt();
 			sound.start();
-			snake.getLonger();
+			//sound.join();
+			music=new Music();
+			music.start();
+			//snake.getLonger();
 			plantFood();
 		}
 		else{
 		snake.setEating(false);
+		snake.removeLast();
 		}
 	}
 

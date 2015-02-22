@@ -8,10 +8,11 @@ public class Music extends Thread{
 
 	@Override
 	public void run() {
-
+		
 		URL urlClick = getClass().getResource("music.wav");
 		AudioClip click = Applet.newAudioClip(urlClick);
-		click.play();
+		//click.play();
+		click.loop();
 	}
 	public static void main(String args[]){
 		Music music=new Music();

@@ -23,6 +23,7 @@ public class Snake extends JFrame implements KeyListener {
 	private String direction;
 	private World world;
 	private boolean gameOver;
+	private Music music;
 
 	public Snake() throws IOException {
 		setLayout(new BorderLayout());
@@ -30,7 +31,8 @@ public class Snake extends JFrame implements KeyListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		container = getContentPane();
 		executor = Executors.newScheduledThreadPool(1);
-		world=new World(200,200);
+		music=new Music();
+		world=new World(200,200,music);
 		world.addKeyListener(this);
 		world.setFocusable(true);
 		
@@ -42,7 +44,12 @@ public class Snake extends JFrame implements KeyListener {
 				if(!gameOver){
 				
 				world.updateSnake(direction);
-				world.checkEat();
+				try {
+					world.checkEat();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				gameOver=world.checkGameOver();
 				if(gameOver){
 					JOptionPane.showMessageDialog(null, "Game Over");
@@ -59,6 +66,7 @@ public class Snake extends JFrame implements KeyListener {
 		container.add(world,BorderLayout.CENTER);
 		pack();
 		setLocationRelativeTo(null);
+		music.start();
 	}
 
 	public static void main(String args[]) {
@@ -66,8 +74,7 @@ public class Snake extends JFrame implements KeyListener {
 		try {
 			snake = new Snake();
 			snake.setVisible(true);
-			Music music=new Music();
-			music.start();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
