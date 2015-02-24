@@ -4,25 +4,23 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
-public class Food {
-
-	private Image food;
+public class Rock {
+	//private Image rock;
 	private int x;
 	private int y;
 	private final int SIZE;
 
-	public Food(int size) throws IOException {
-		food = ImageIO.read(getClass().getResource("apple2.png"));
+	public Rock(int size, int x, int y) throws IOException {
+		// rock = ImageIO.read(getClass().getResource("rock.jpg"));
 		SIZE = size;
+		this.x = x;
+		this.y = y;
 
 	}
 
-	public Image getFood() {
-		return food;
-	}
-
+	/*
+	 * public Image getRock() { return rock; }
+	 */
 	public int getX() {
 		return x;
 	}
@@ -39,9 +37,9 @@ public class Food {
 		this.y = y;
 	}
 
-	public void drawFood(Graphics g) {
+	public void drawRock(Graphics g,Image rock) {
 
-		g.drawImage(food, x, y, SIZE, SIZE, null);
+		g.drawImage(rock, x, y, SIZE, SIZE, null);
 
 	}
 
