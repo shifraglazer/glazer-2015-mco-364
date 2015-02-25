@@ -15,7 +15,7 @@ public class Music extends Thread{
 		URL urlClick = getClass().getResource("music.wav");
 		 click = Applet.newAudioClip(urlClick);
 	  
-		click.play();;
+		click.play();
 	
 		
 	}

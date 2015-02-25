@@ -102,9 +102,8 @@ public class SnakeBody {
 		}
 		}
 		if (occupies(cell.getX(), cell.getY())) {
-
-			BangSound sound = new BangSound();
-			sound.start();
+			
+			
 			bangSnake = true;
 		} else {
 			snake.addFirst(cell);

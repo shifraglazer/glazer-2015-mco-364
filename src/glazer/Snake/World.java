@@ -272,6 +272,10 @@ public class World extends JPanel {
 			return true;
 
 		} else if (snake.bangSnake()) {
+			if (sound) {
+				BangSound sound = new BangSound();
+				sound.start();
+			}
 			gameOver = true;
 			return true;
 		} else if (bangRock()) {
@@ -298,8 +302,10 @@ public class World extends JPanel {
 	public boolean bangRock() {
 		if (rock.occupies(snake.getSnake().getFirst().getX(), snake.getSnake()
 				.getFirst().getY())) {
-			Bang2 sound = new Bang2();
-			sound.start();
+			if (sound) {
+				Bang2 sound = new Bang2();
+				sound.start();
+			}
 			return true;
 		} else {
 			return false;
