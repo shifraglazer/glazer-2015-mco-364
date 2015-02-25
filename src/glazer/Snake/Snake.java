@@ -1,4 +1,4 @@
-package glazer.Snake;
+package glazer.snake;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -26,7 +26,7 @@ public class Snake extends JFrame implements KeyListener {
 	private ScheduledExecutorService executeMusic;
 	private String direction;
 	private World world;
-	//private Music music;
+	// private Music music;
 	// game controls
 	private boolean gameStart;
 	private boolean sound;
@@ -70,7 +70,7 @@ public class Snake extends JFrame implements KeyListener {
 
 		direction = "Up";
 		gameOver = false;
-		//music = new Music();
+		// music = new Music();
 		setIconImage(new Food(20).getFood());
 		executor = Executors.newScheduledThreadPool(1);
 		executeMusic = Executors.newScheduledThreadPool(1);
@@ -197,49 +197,29 @@ public class Snake extends JFrame implements KeyListener {
 				case "beginner": {
 					// changing=true;
 					world.recreateWorld(300, 300, 5);
-					direction = "Up";
-
-					executeMusic.shutdownNow();
-					executeMusic = Executors.newScheduledThreadPool(1);
-					executeMusic.scheduleAtFixedRate(playMusic, 0, 20,
-							TimeUnit.SECONDS);
-					gameOver = false;
-					// changing=false;
-					world.setGameStart(true);
-					gameStart = true;
 					break;
 				}
 
 				case "intermediate": {
 					// changing = true;
 					world.recreateWorld(300, 300, 10);
-					direction = "Up";
-					executeMusic.shutdownNow();
-					executeMusic = Executors.newScheduledThreadPool(1);
-					executeMusic.scheduleAtFixedRate(playMusic, 0, 20,
-							TimeUnit.SECONDS);
-
-					// changing = false;
-					gameOver = false;
-					world.setGameStart(true);
-					gameStart = true;
 					break;
 				}
 				case "advanced": {
 					// changing = true;
 					world.recreateWorld(300, 300, 8);
-					direction = "Up";
-					executeMusic.shutdownNow();
-					executeMusic = Executors.newScheduledThreadPool(1);
-					executeMusic.scheduleAtFixedRate(playMusic, 0, 20,
-							TimeUnit.SECONDS);
-					gameOver = false;
-					// changing = false;
-					world.setGameStart(true);
-					gameStart = true;
 					break;
 				}
 				}
+				gameOver = false;
+				// changing = false;
+				world.setGameStart(true);
+				gameStart = true;
+				direction = "Up";
+				executeMusic.shutdownNow();
+				executeMusic = Executors.newScheduledThreadPool(1);
+				executeMusic.scheduleAtFixedRate(playMusic, 0, 20,
+						TimeUnit.SECONDS);
 			} catch (IOException e1) {
 
 				e1.printStackTrace();

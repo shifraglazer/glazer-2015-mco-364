@@ -1,4 +1,4 @@
-package glazer.Snake;
+package glazer.snake;
 
 import java.awt.Color;
 import java.awt.Dimension;

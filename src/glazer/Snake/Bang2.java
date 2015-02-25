@@ -1,4 +1,4 @@
-package glazer.Snake;
+package glazer.snake;
 
 import java.applet.Applet;
 import java.applet.AudioClip;

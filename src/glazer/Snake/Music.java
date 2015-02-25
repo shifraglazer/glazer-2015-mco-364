@@ -1,4 +1,4 @@
-package glazer.Snake;
+package glazer.snake;
 
 
 

@@ -1,4 +1,4 @@
-package glazer.Project;
+package glazer.project;
 
 import java.awt.Graphics;
 import java.awt.Image;

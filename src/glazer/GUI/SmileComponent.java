@@ -1,4 +1,4 @@
-package glazer.GUI;
+package glazer.gui;
 
 import java.awt.Color;
 import java.awt.Container;

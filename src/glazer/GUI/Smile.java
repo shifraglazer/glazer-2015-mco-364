@@ -1,4 +1,4 @@
-package glazer.GUI;
+package glazer.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
