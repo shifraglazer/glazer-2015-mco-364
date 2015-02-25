@@ -185,6 +185,10 @@ public class Snake extends JFrame implements KeyListener {
 			gameOver = false;
 			world.setGameStart(true);
 			gameStart = true;
+			executeMusic.shutdown();
+			executeMusic = Executors.newScheduledThreadPool(1);
+			executeMusic
+					.scheduleAtFixedRate(playMusic, 0, 20, TimeUnit.SECONDS);
 		}
 
 	};
