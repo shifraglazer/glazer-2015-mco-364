@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -35,7 +37,7 @@ public class Snake extends JFrame implements KeyListener {
 	private JMenu options;
 	private JMenuBar menu;
 	private JMenuItem restartGame;
-	private JMenuItem mute;
+	private JCheckBoxMenuItem mute;
 
 	// private JMenu gameOptions;
 	// private boolean changing;
@@ -49,7 +51,7 @@ public class Snake extends JFrame implements KeyListener {
 		setResizable(false);
 		setLocationRelativeTo(null);
 
-		mute = new JMenuItem("Mute");
+		mute = new JCheckBoxMenuItem("Mute");
 		mute.addActionListener(muteGame);
 		gameStart = false;
 
