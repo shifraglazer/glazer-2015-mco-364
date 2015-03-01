@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -25,10 +26,10 @@ public class Snake extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
 	private Container container;
 	private ScheduledExecutorService executor;
-	private ScheduledExecutorService executeMusic;
+
 	private String direction;
 	private World world;
-	// private Music music;
+	private Music music;
 	// game controls
 	private boolean gameStart;
 	private boolean sound;
@@ -72,18 +73,19 @@ public class Snake extends JFrame implements KeyListener {
 
 		direction = "Up";
 		gameOver = false;
-		// music = new Music();
-		setIconImage(new Food(20).getFood());
+		music = new Music();
+		music.start();
 		executor = Executors.newScheduledThreadPool(1);
-		executeMusic = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(paint, 0, 400, TimeUnit.MILLISECONDS);
-		executeMusic.scheduleAtFixedRate(playMusic, 0, 20, TimeUnit.SECONDS);
+		setIconImage(new Food(20).getFood());
+
 		pack();
 
 	}
 
 	public void setUpMenu() {
 		menu = new JMenuBar();
+		menu.setBorder(BorderFactory.createRaisedBevelBorder());
 		menu.add(mute);
 		options = new JMenu("Levels");
 		JMenuItem[] play = new JMenuItem[3];
@@ -93,6 +95,9 @@ public class Snake extends JFrame implements KeyListener {
 			play[i].addActionListener(listener);
 			options.add(play[i]);
 		}
+		restartGame.setToolTipText("Play new game");
+		options.setToolTipText("choose game level");
+		mute.setToolTipText("mute sound");
 		menu.add(restartGame);
 		menu.add(options);
 		this.setJMenuBar(menu);
@@ -175,6 +180,7 @@ public class Snake extends JFrame implements KeyListener {
 			// changing = true;
 			try {
 				world.recreateWorld(300, 300, 5);
+
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -185,10 +191,7 @@ public class Snake extends JFrame implements KeyListener {
 			gameOver = false;
 			world.setGameStart(true);
 			gameStart = true;
-			executeMusic.shutdown();
-			executeMusic = Executors.newScheduledThreadPool(1);
-			executeMusic
-					.scheduleAtFixedRate(playMusic, 0, 20, TimeUnit.SECONDS);
+
 		}
 
 	};
@@ -222,10 +225,7 @@ public class Snake extends JFrame implements KeyListener {
 				world.setGameStart(true);
 				gameStart = true;
 				direction = "Up";
-				executeMusic.shutdownNow();
-				executeMusic = Executors.newScheduledThreadPool(1);
-				executeMusic.scheduleAtFixedRate(playMusic, 0, 20,
-						TimeUnit.SECONDS);
+
 			} catch (IOException e1) {
 
 				e1.printStackTrace();
@@ -238,13 +238,15 @@ public class Snake extends JFrame implements KeyListener {
 			if (sound) {
 				sound = false;
 				world.setSound(false);
-				executeMusic.shutdownNow();
+				music.stopMusic();
+
 			} else {
+
+				music = new Music();
+				music.start();
 				sound = true;
 				world.setSound(true);
-				executeMusic = Executors.newScheduledThreadPool(1);
-				executeMusic.scheduleAtFixedRate(playMusic, 0, 20,
-						TimeUnit.SECONDS);
+
 			}
 
 		}
