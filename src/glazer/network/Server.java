@@ -1,0 +1,31 @@
+package glazer.network;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class Server {
+
+	public static void main(String[] args) {
+
+		try {
+
+			ServerSocket serverSocket = new ServerSocket(3762); // port num sent
+
+			// in
+
+			while (true) {
+
+				Socket socket = serverSocket.accept();
+				ReadThread t = new ReadThread(socket);
+				t.start();
+
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+	}
+}
