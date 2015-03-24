@@ -21,7 +21,7 @@ public class ChatClient {
 			//client = new Socket("192.168.1.6", 3762);
 			
 		
-			socket = new Socket("localhost", 3765);
+			socket = new Socket("localhost", 6003);
 			ReadThread thread=new ReadThread(socket,textArea);
 			thread.start();
 			/*

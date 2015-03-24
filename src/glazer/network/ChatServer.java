@@ -17,7 +17,7 @@ public class ChatServer {
 		try {
 			//client = new Socket("192.168.1.6", 3762);
 			
-			ServerSocket serverSocket = new ServerSocket(3765); // port num sent
+			ServerSocket serverSocket = new ServerSocket(6003); // port num sent
 			socket = serverSocket.accept();
 			ReadThread thread=new ReadThread(socket,textArea);
 			thread.start();

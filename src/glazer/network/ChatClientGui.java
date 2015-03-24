@@ -1,5 +1,6 @@
 package glazer.network;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -34,6 +35,7 @@ public class ChatClientGui extends JFrame{
 			text = new JTextField();
 			pane = new JScrollPane();
 			area.add(pane);
+			area.setEditable(false);
 			text.setPreferredSize(new Dimension(150, 25));
 			KeyListener key = new KeyListener() {
 

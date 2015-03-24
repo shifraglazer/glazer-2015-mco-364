@@ -32,6 +32,7 @@ public class ChatServerGui extends JFrame {
 		container.add(area);
 		text = new JTextField();
 		pane = new JScrollPane();
+		area.setEditable(false);
 		area.add(pane);
 		text.setPreferredSize(new Dimension(150, 25));
 		KeyListener key = new KeyListener() {
