@@ -12,9 +12,11 @@ public class ReadThread extends Thread{
 
 	private Socket socket;
 	private JTextArea textArea;
-	public ReadThread(Socket socket,JTextArea textArea){
+	private ReaderListener listener;
+	public ReadThread(Socket socket,JTextArea textArea,ReaderListener listener){
 		this.textArea=textArea;
 		this.socket=socket;
+		this.listener=listener;
 	}
 	public void run(){
 	
@@ -25,7 +27,7 @@ public class ReadThread extends Thread{
 			String line;
 
 			while ((line = reader.readLine()) != null) {
-
+				listener.onLineRead(line);
 				textArea.append(line+"\n");
 
 			}
@@ -33,7 +35,7 @@ public class ReadThread extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		listener.onCloseSocket(socket);
 	
 
 	}
