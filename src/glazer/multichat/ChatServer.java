@@ -1,0 +1,54 @@
+package glazer.multichat;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class ChatServer implements ReaderListener{
+
+	private Socket socket;
+	private LinkedBlockingQueue<Object> queue;
+	private ArrayList<Socket> sockets;
+	private WriterThread write;
+	public ChatServer() {
+		queue= new LinkedBlockingQueue<Object>();
+		sockets= new ArrayList<Socket>();
+		write=new WriterThread(sockets,queue);
+		write.start();
+		try {
+			//client = new Socket("192.168.1.6", 3762);
+			
+			ServerSocket serverSocket = new ServerSocket(6003); // port num sent
+			while( true){
+			socket = serverSocket.accept();
+			sockets.add(socket);
+			ReaderThread thread=new ReaderThread(socket,this);
+			thread.start();
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+	}
+
+	
+
+	@Override
+	public void onObjectRead(Object obj) {
+	queue.add(obj);
+		
+	}
+
+	@Override
+	public void onCloseSocket(Socket socket) {
+		// TODO Auto-generated method stub
+		
+	}
+	public static void main(String args[]){
+		ChatServer chat=new ChatServer();
+	}
+}
