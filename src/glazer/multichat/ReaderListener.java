@@ -2,9 +2,9 @@ package glazer.multichat;
 
 import java.net.Socket;
 
-public interface ReaderListener {
+public interface ReaderListener  {
 
-	void onObjectRead(Object obj);
+	void onLineRead(String line);
 
 	void onCloseSocket(Socket socket);
 

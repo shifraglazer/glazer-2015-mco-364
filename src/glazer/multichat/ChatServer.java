@@ -9,11 +9,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ChatServer implements ReaderListener{
 
 	private Socket socket;
-	private LinkedBlockingQueue<Object> queue;
+	private LinkedBlockingQueue<String> queue;
 	private ArrayList<Socket> sockets;
 	private WriterThread write;
 	public ChatServer() {
-		queue= new LinkedBlockingQueue<Object>();
+		queue= new LinkedBlockingQueue<String>();
 		sockets= new ArrayList<Socket>();
 		write=new WriterThread(sockets,queue);
 		write.start();
@@ -38,10 +38,10 @@ public class ChatServer implements ReaderListener{
 	
 
 	@Override
-	public void onObjectRead(Object obj) {
-	queue.add(obj);
-		
+	public void onLineRead(String line) {
+		queue.add(line);
 	}
+
 
 	@Override
 	public void onCloseSocket(Socket socket) {
@@ -51,4 +51,7 @@ public class ChatServer implements ReaderListener{
 	public static void main(String args[]){
 		ChatServer chat=new ChatServer();
 	}
+
+
+
 }

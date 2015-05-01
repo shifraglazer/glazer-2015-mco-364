@@ -1,4 +1,4 @@
-package glazer.network;
+package glazer.multichat;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -23,7 +23,7 @@ public class ChatClientGui extends JFrame{
 		private JTextArea area;
 		private Container container;
 		private JScrollPane pane;
-		private ChatClient client;
+		private Client client;
 
 		public ChatClientGui() {
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -68,7 +68,7 @@ public class ChatClientGui extends JFrame{
 				}
 
 			};
-			client = new ChatClient(area);
+			client = new Client(area);
 			text.addKeyListener(key);
 			container.add(text);
 
@@ -77,7 +77,7 @@ public class ChatClientGui extends JFrame{
 		public void readText() throws IOException {
 			
 			area.append(text.getText() + "\n");
-			client.sendText(text.getText());
+			client.sendMessage(text.getText());
 			text.setText("");
 		}
 
