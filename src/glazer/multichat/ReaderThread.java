@@ -1,8 +1,9 @@
 package glazer.multichat;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class ReaderThread extends Thread {
@@ -18,18 +19,21 @@ public class ReaderThread extends Thread {
 	public void run() {
 		try {
 			InputStream in = socket.getInputStream();
-			ObjectInputStream objIn = new ObjectInputStream(in);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String line;
 
-			while (true) {
-				Object obj =  objIn.readObject();
-				listener.onObjectRead(obj);
+			while ((line = reader.readLine()) != null) {
+				//System.out.println("reading: "+ line);
+				
+				listener.onLineRead(line);
+
 			}
 			// in.close();
 			// onjIn.close();
 		}
-		catch (ClassNotFoundException | IOException e) {
+		catch (IOException e) {
 			e.printStackTrace();
 		}
-		listener.onCloseSocket(socket);
+		//listener.onCloseSocket(socket);
 	}
 }

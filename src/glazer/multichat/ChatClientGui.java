@@ -1,10 +1,12 @@
 package glazer.multichat;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -25,7 +27,7 @@ public class ChatClientGui extends JFrame{
 		private JScrollPane pane;
 		private Client client;
 
-		public ChatClientGui() {
+		public ChatClientGui() throws UnknownHostException, IOException {
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setTitle("client");
 			setLocationRelativeTo(null);
@@ -35,6 +37,8 @@ public class ChatClientGui extends JFrame{
 			area.setPreferredSize(new Dimension(150, 500));
 			container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 			container.add(area);
+			JScrollPane pane = new JScrollPane(area);
+			add(pane, BorderLayout.CENTER);
 			text = new JTextField();
 			pane = new JScrollPane();
 			area.add(pane);
@@ -82,8 +86,15 @@ public class ChatClientGui extends JFrame{
 		}
 
 		public static void main(String args[]) {
-			ChatClientGui chat = new ChatClientGui();
-			chat.setVisible(true);
+			ChatClientGui chat;
+			try {
+				chat = new ChatClientGui();
+				chat.setVisible(true);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 		}
 	}
 

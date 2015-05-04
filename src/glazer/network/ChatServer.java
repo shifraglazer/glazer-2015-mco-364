@@ -11,15 +11,15 @@ import javax.swing.JTextArea;
 public class ChatServer {
 
 	private Socket socket;
-
+	private JTextArea textArea;
 	public ChatServer(JTextArea textArea) {
 
 		try {
 			//client = new Socket("192.168.1.6", 3762);
-			
+			this.textArea=textArea;
 			ServerSocket serverSocket = new ServerSocket(6003); // port num sent
 			socket = serverSocket.accept();
-			ReadThread thread=new ReadThread(socket,textArea);
+			ReadThread thread=new ReadThread(socket,this.textArea);
 			thread.start();
 			/*
 			//client = new Socket("localhost", 3762);

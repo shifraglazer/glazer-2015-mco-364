@@ -20,13 +20,15 @@ public class WriterThread extends Thread {
 
 	@Override
 	public void run() {
+		
 		while (true) {
 			try {
 				String string = queue.take();
 				for (Socket o : sockets) {
+					//System.out.println("server writing: "+string);
 					OutputStream stream = o.getOutputStream();
 					PrintWriter write = new PrintWriter(stream);
-					write.write(string);
+					write.println(string);
 					write.flush();
 				}
 			} catch (InterruptedException e) {

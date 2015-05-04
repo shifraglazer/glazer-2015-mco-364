@@ -8,35 +8,34 @@ import java.net.Socket;
 
 import javax.swing.JTextArea;
 
-public class ReadThread extends Thread{
+public class ReadThread extends Thread {
 
 	private Socket socket;
 	private JTextArea textArea;
-	private ReaderListener listener;
-	public ReadThread(Socket socket,JTextArea textArea,ReaderListener listener){
-		this.textArea=textArea;
-		this.socket=socket;
-		this.listener=listener;
+
+	public ReadThread(Socket socket, JTextArea textArea) {
+		this.textArea = textArea;
+		this.socket = socket;
+		textArea.append("welcome");
 	}
-	public void run(){
-	
+
+	public void run() {
+
 		try {
 			InputStream in = socket.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(in));
 
 			String line;
 
 			while ((line = reader.readLine()) != null) {
-				listener.onLineRead(line);
-				textArea.append(line+"\n");
+				textArea.append(line + "\n");
 
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		listener.onCloseSocket(socket);
-	
 
 	}
 }

@@ -1,5 +1,6 @@
 package glazer.network;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -14,6 +15,10 @@ import javax.swing.JTextField;
 
 public class ChatServerGui extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField text;
 	private JTextArea area;
 	private Container container;
@@ -30,6 +35,8 @@ public class ChatServerGui extends JFrame {
 		area.setPreferredSize(new Dimension(150, 500));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.add(area);
+		JScrollPane pane = new JScrollPane(area);
+		add(pane, BorderLayout.CENTER);
 		text = new JTextField();
 		pane = new JScrollPane();
 		area.setEditable(false);
