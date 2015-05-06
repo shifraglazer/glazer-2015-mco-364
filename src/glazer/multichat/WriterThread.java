@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class WriterThread extends Thread {
@@ -22,23 +23,30 @@ public class WriterThread extends Thread {
 	public void run() {
 		
 		while (true) {
-			try {
-				String string = queue.take();
-				for (Socket o : sockets) {
+		synchronized(sockets){
+			Iterator<Socket> iter=sockets.iterator();
+			while(iter.hasNext()){
+				Socket s=iter.next();
+				String string;
+				try {
+					string = queue.take();
+					try {
+						
 					//System.out.println("server writing: "+string);
-					OutputStream stream = o.getOutputStream();
+					OutputStream stream = s.getOutputStream();
 					PrintWriter write = new PrintWriter(stream);
 					write.println(string);
 					write.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					iter.remove();
+					e.printStackTrace();
 				}
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		}
-	}
-
+		}}}
 }

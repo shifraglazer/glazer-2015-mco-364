@@ -24,7 +24,6 @@ public class ChatClientGui extends JFrame{
 		private JTextField text;
 		private JTextArea area;
 		private Container container;
-		private JScrollPane pane;
 		private Client client;
 
 		public ChatClientGui() throws UnknownHostException, IOException {
@@ -80,7 +79,7 @@ public class ChatClientGui extends JFrame{
 
 		public void readText() throws IOException {
 			
-			area.append(text.getText() + "\n");
+			//area.append(text.getText() + "\n");
 			client.sendMessage(text.getText());
 			text.setText("");
 		}

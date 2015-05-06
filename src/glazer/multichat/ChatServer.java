@@ -23,7 +23,9 @@ public class ChatServer implements ReaderListener{
 			ServerSocket serverSocket = new ServerSocket(6003); // port num sent
 			while( true){
 			socket = serverSocket.accept();
+			synchronized(sockets){
 			sockets.add(socket);
+			}
 			ReaderThread thread=new ReaderThread(socket,this);
 			thread.start();
 			}
