@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class Canvas extends JPanel {
 
@@ -29,6 +30,7 @@ public class Canvas extends JPanel {
 		Graphics graphics = image.getGraphics();
 		graphics.setColor(Color.WHITE);
 		graphics.fillRect(0, 0, width, height);
+		graphics.setColor(Color.BLACK);
 	}
 
 	@Override
@@ -37,5 +39,7 @@ public class Canvas extends JPanel {
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, null);
 	}
+
+	
 
 }
