@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 
 public class DrawListener implements MouseListener, MouseMotionListener {
 
@@ -31,6 +32,18 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 		this.x = x;
 		this.y = y;
 		}
+		else if (function.equals("rectangle")){
+			int width=(int)Math.abs(this.x-x);
+			int height=(int)Math.abs(this.y-y);
+			BufferedImage image=new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+			Graphics graphics2 = image.getGraphics();
+			graphics2.setColor(Color.WHITE);
+			graphics2.fillRect(0, 0, width, height);
+			graphics2.setColor(Color.BLACK);
+			graphics2.drawRect(0, 0,width, height);
+			graphics.drawImage(image, this.x, this.y,null);
+		}
+	
 		canvas.repaint();
 	}
 
