@@ -2,28 +2,21 @@ package glazer.paint;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+
 
 public class Canvas extends JPanel {
 
-	public Image getImage() {
-		return image;
-	}
 
-	public void setImage(Image image) {
-		this.image = image;
-	}
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Image image;
+	private BufferedImage image;
 
 	public Canvas(int width, int height) {
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -31,6 +24,7 @@ public class Canvas extends JPanel {
 		graphics.setColor(Color.WHITE);
 		graphics.fillRect(0, 0, width, height);
 		graphics.setColor(Color.BLACK);
+		
 	}
 
 	@Override
@@ -40,6 +34,12 @@ public class Canvas extends JPanel {
 		g.drawImage(image, 0, 0, null);
 	}
 
-	
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
 
 }

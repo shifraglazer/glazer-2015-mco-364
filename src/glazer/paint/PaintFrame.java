@@ -1,16 +1,13 @@
 package glazer.paint;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 public class PaintFrame extends JFrame {
 
@@ -18,99 +15,57 @@ public class PaintFrame extends JFrame {
 
 	private int width;
 	private int height;
-	private JTextField color;
-	private JMenuBar menu;
-	private JButton rectangle;
-	private JButton pencil;
+	private Toolbar toolbar;
+	private JSplitPane pane;
+
 	public PaintFrame() {
 		width = 800;
 		height = 600;
 		setSize(width, height);
-
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		color = new JTextField("Enter color");
-		menu=new JMenuBar();
-		rectangle=new JButton("Draw Rect");
-		pencil=new JButton("Draw Pencil");
-		menu.add(rectangle);
-		menu.add(pencil);
-		menu.add(color);
-		setJMenuBar(menu);
-		setLayout(new BorderLayout());
+		pane = new JSplitPane();
 		Canvas canvas = new Canvas(600, 600);
-		add(canvas, BorderLayout.CENTER);
+		canvas.setPreferredSize(new Dimension(600, 600));
+		pane.setLeftComponent(canvas);
+		pane.setRightComponent(new JPanel());
 		DrawListener listener = new DrawListener(canvas);
+		toolbar = new Toolbar(listener);
+		setJMenuBar(toolbar);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(new BorderLayout());
+		add(pane, BorderLayout.CENTER);
 		canvas.addMouseListener(listener);
 		canvas.addMouseMotionListener(listener);
-		ActionListener rect=new ActionListener(){
+
+		ComponentListener change = new ComponentListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-			listener.setFunction("rectangle");
-			}
-			
-		};
-		ActionListener pencilListener=new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			listener.setFunction("pencil");
-			}
-			
-		};
-		pencil.addActionListener(pencilListener);
-		rectangle.addActionListener(rect);
-		KeyListener listenColor=new KeyListener(){
-
-			@Override
-			public void keyTyped(KeyEvent e) {
-			
-			
+			public void componentResized(ComponentEvent e) {
+		
+				listener.resizeCanvas();
+				
 			}
 
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void componentMoved(ComponentEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
-			public void keyReleased(KeyEvent e) {
-				
-				if(e.getKeyCode()==KeyEvent.VK_ENTER){
-					JTextField field=(JTextField) e.getSource();
-				
-					Color color=Color.BLACK;
-					switch(field.getText()){
-					case "Red":
-						color=Color.RED;
-						break;
-					case "Orange":
-						color=Color.ORANGE;
-						break;
-					case "Yellow":
-						color=Color.YELLOW;
-						break;
-					case "Green":
-						color=Color.GREEN;
-						break;
-					case "Blue":
-						color=Color.BLUE;
-						break;
-					case "Pink":
-						color=Color.PINK;
-						break;
-					}
-					listener.setColor(color);
-					field.setText("");
-				}
-			}
-			
-		};
-		color.addKeyListener(listenColor);
-	}
-	
+			public void componentShown(ComponentEvent e) {
+				// TODO Auto-generated method stub
 
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+		};
+		canvas.addComponentListener(change);
+	}
 
 	public static void main(String[] args) {
 
