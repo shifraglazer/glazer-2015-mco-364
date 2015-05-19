@@ -34,7 +34,8 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 			graphics.setColor(Color.WHITE);
 			graphics.fillRect(0, 0, 600, 600);
 		}
-			historyLeft=0;
+			historyPointer=0;
+			historyLeft=1;
 		this.color = Color.BLACK;
 		this.function = "pencil";
 		this.temp = new BufferedImage(600, 600, BufferedImage.TYPE_INT_RGB);
@@ -137,14 +138,19 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 	}
 
 	public void commitHistory(BufferedImage image) {
-
-		if (historyPointer < history.length-1) {
-			history[++historyPointer].getGraphics().drawImage(image,0,0,null);
-		} else {
-			historyPointer = 0;
+		//pointer is next one to undo
+		//+1 is where commit next image
+		//pointer is <=6
+		if (historyPointer < history.length) {
 			history[historyPointer].getGraphics().drawImage(image,0,0,null);
+			if(historyPointer==history.length-1){
+				historyPointer=0;
+			}
+			else{
+				historyPointer++;
+			}
 		}
-		if(historyLeft<8){
+		if(historyLeft<6){
 			historyLeft++;
 		}
 		System.out.println("commited. pointer= " + historyPointer);
@@ -155,15 +161,23 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 		Graphics graphics = canvas.getImage().getGraphics();
 
 	if(historyLeft>0){
-		if (historyPointer >0) {
-			graphics.drawImage( history[historyPointer-1], 0,
+		//8 to 1
+		if (historyPointer ==0) {
+			graphics.drawImage( history[history.length-2], 0,
+					0, null);
+			historyPointer=history.length-2;
+
+			//is 0
+		} 
+		else if (historyPointer==1){
+			graphics.drawImage( history[history.length-1], 0,
+					0, null);
+			historyPointer=history.length-1;
+
+		}else{
+			graphics.drawImage( history[historyPointer-2], 0,
 					0, null);
 			historyPointer--;
-
-		} else {
-			graphics.drawImage( history[history.length - 1], 0,
-					0, null);
-			historyPointer = history.length - 1;
 		}
 		historyLeft--;
 
