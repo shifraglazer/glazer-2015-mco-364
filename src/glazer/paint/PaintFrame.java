@@ -17,6 +17,7 @@ public class PaintFrame extends JFrame {
 	private int height;
 	private Toolbar toolbar;
 	private JSplitPane pane;
+	
 
 	public PaintFrame() {
 		width = 800;
@@ -27,7 +28,7 @@ public class PaintFrame extends JFrame {
 		canvas.setPreferredSize(new Dimension(600, 600));
 		pane.setLeftComponent(canvas);
 		pane.setRightComponent(new JPanel());
-		DrawListener listener = new DrawListener(canvas);
+		BrushListener listener = new RectangleListener(canvas);
 		toolbar = new Toolbar(listener);
 		setJMenuBar(toolbar);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

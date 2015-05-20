@@ -22,31 +22,31 @@ public class Toolbar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private JButton rectangle;
-	private JButton pencil;
+	private ModeButton rectangle;
+	private ModeButton pencil;
 	private JPanel colors;
-	private DrawListener listener;
-	private JButton red;
-	private JButton orange;
-	private JButton yellow;
-	private JButton green;
-	private JButton blue;
-	private JButton black;
-	private JButton white;
-	private JButton purple;
-	private JButton undo;
-	private JButton rotate;
+	private Canvas canvas;
+	private ModeButton red;
+	private ModeButton orange;
+	private ModeButton yellow;
+	private ModeButton green;
+	private ModeButton blue;
+	private ModeButton black;
+	private ModeButton white;
+	private ModeButton purple;
+	private ModeButton undo;
+	private ModeButton rotate;
 	private JMenu thickness;
 	private JMenuItem thin;
 	private JMenuItem medium;
 	private JMenuItem thick;
 	private JMenuItem normal;
 
-	public Toolbar(DrawListener listener) {
+	public Toolbar(Canvas canvas) {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		this.listener = listener;
-		rectangle = new JButton("Draw Rect");
-		pencil = new JButton();
+		this.canvas=canvas;
+		rectangle = new ModeButton("Draw Rect");
+		pencil = new ModeButton();
 		ImageIcon pencilPic = new ImageIcon(getClass()
 				.getResource("pencil.png"));
 		pencil.setOpaque(false);
@@ -56,12 +56,12 @@ public class Toolbar extends JMenuBar {
 		pencil.setIcon(new ImageIcon(pencilPic.getImage().getScaledInstance(30,
 				20, Image.SCALE_SMOOTH)));
 		colors = new JPanel();
-		undo = new JButton();
+		undo = new ModeButton();
 		undo.setOpaque(false);
 		ImageIcon undoPic=new ImageIcon(getClass().getResource("undo.png"));
 		undo.setIcon(new ImageIcon(undoPic.getImage().getScaledInstance(30, 20,Image.SCALE_SMOOTH)));
 		undo.setBackground(Color.WHITE);
-		rotate = new JButton("Rotate 90");
+		rotate = new ModeButton("Rotate 90");
 		rotate.setOpaque(false);
 		rotate.setBackground(Color.WHITE);
 		setUpPallet();
@@ -73,11 +73,12 @@ public class Toolbar extends JMenuBar {
 		add(colors);
 		colors.setLayout(new GridLayout(2, 5));
 
-		ActionListener rect = new ActionListener() {
+		ActionListener actionListener = new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				listener.setFunction("rectangle");
+				 ModeButton button=(ModeButton)e.getSource();
+				 canvas.setListener(button.getListener());
 			}
 
 		};

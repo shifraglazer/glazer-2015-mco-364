@@ -25,17 +25,17 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 	private int thick;
 
 	public DrawListener(Canvas canvas) {
-		this.thick=4;
+		this.thick = 4;
 		this.canvas = canvas;
 		this.history = new BufferedImage[8];
-		for(int i=0;i<history.length;i++){
-			history[i]= new BufferedImage(600, 600, BufferedImage.TYPE_INT_RGB);
-			Graphics graphics=history[i].getGraphics();
+		for (int i = 0; i < history.length; i++) {
+			history[i] = new BufferedImage(600, 600, BufferedImage.TYPE_INT_RGB);
+			Graphics graphics = history[i].getGraphics();
 			graphics.setColor(Color.WHITE);
 			graphics.fillRect(0, 0, 600, 600);
 		}
-			historyPointer=0;
-			historyLeft=1;
+		historyPointer = 0;
+		historyLeft = 1;
 		this.color = Color.BLACK;
 		this.function = "pencil";
 		this.temp = new BufferedImage(600, 600, BufferedImage.TYPE_INT_RGB);
@@ -46,7 +46,7 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 		int x = event.getX();
 		int y = event.getY();
 		Graphics graphics = canvas.getImage().getGraphics();
-		Graphics2D g2=(Graphics2D)graphics;
+		Graphics2D g2 = (Graphics2D) graphics;
 		g2.setColor(color);
 		g2.setStroke(new BasicStroke(thick));
 		if (function.equals("pencil")) {
@@ -56,8 +56,16 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 		} else if (function.equals("rectangle")) {
 			int width = (int) Math.abs(this.x - x);
 			int height = (int) Math.abs(this.y - y);
-			g2.drawImage(temp,0, 0, null);
-			g2.drawRect(this.x, this.y, width, height);
+			g2.drawImage(temp, 0, 0, null);
+			if (x > this.x && y > this.y) {
+				g2.drawRect(this.x, this.y, width, height);
+			} else if (x < this.x && y < this.y) {
+				g2.drawRect(this.x-width, this.y-height, width, height);
+			} else if (x < this.x && y > this.y) {
+				g2.drawRect(this.x-width, this.y, width, height);
+			} else if (x > this.x && y < this.y) {
+				g2.drawRect(this.x, this.y-height, width, height);
+			}
 		}
 
 		canvas.repaint();
@@ -92,7 +100,7 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 		int x = event.getX();
 		int y = event.getY();
 		Graphics graphics = canvas.getImage().getGraphics();
-		Graphics2D g2=(Graphics2D)graphics;
+		Graphics2D g2 = (Graphics2D) graphics;
 		g2.setStroke(new BasicStroke(thick));
 		g2.setColor(color);
 		if (function.equals("pencil")) {
@@ -102,8 +110,9 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 		} else if (function.equals("rectangle")) {
 			this.x = x;
 			this.y = y;
-			temp=new BufferedImage(canvas.getWidth(),canvas.getHeight(),BufferedImage.TYPE_INT_RGB);
-			Graphics tempG=temp.getGraphics();
+			temp = new BufferedImage(canvas.getWidth(), canvas.getHeight(),
+					BufferedImage.TYPE_INT_RGB);
+			Graphics tempG = temp.getGraphics();
 			tempG.drawImage(canvas.getImage(), 0, 0, null);
 		}
 		canvas.repaint();
@@ -115,17 +124,26 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 		int x = event.getX();
 		int y = event.getY();
 		Graphics graphics = canvas.getImage().getGraphics();
-		Graphics2D g2=(Graphics2D)graphics;
+		Graphics2D g2 = (Graphics2D) graphics;
 		g2.setStroke(new BasicStroke(thick));
 		g2.setColor(color);
 		if (function.equals("rectangle")) {
 			g2.drawImage(temp, 0, 0, null);
-			g2.drawRect(this.x, this.y, (int) Math.abs(x - this.x),
-					(int) Math.abs(y - this.y));
+			int width = (int) Math.abs(this.x - x);
+			int height = (int) Math.abs(this.y - y);
+			if (x > this.x && y > this.y) {
+				g2.drawRect(this.x, this.y, width, height);
+			} else if (x < this.x && y < this.y) {
+				g2.drawRect(this.x-width, this.y-height, width, height);
+			} else if (x < this.x && y > this.y) {
+				g2.drawRect(this.x-width, this.y, width, height);
+			} else if (x > this.x && y < this.y) {
+				g2.drawRect(this.x, this.y-height, width, height);
+			}
 		}
 		commitHistory(canvas.getImage());
 		canvas.repaint();
-		
+
 	}
 
 	public void setColor(Color color) {
@@ -138,60 +156,55 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 	}
 
 	public void commitHistory(BufferedImage image) {
-		//pointer is next one to undo
-		//+1 is where commit next image
-		//pointer is <=6
+		// pointer is next one to undo
+		// +1 is where commit next image
+		// pointer is <=6
 		if (historyPointer < history.length) {
-			history[historyPointer].getGraphics().drawImage(image,0,0,null);
-			if(historyPointer==history.length-1){
-				historyPointer=0;
-			}
-			else{
+			history[historyPointer].getGraphics().drawImage(image, 0, 0, null);
+			if (historyPointer == history.length - 1) {
+				historyPointer = 0;
+			} else {
 				historyPointer++;
 			}
 		}
-		if(historyLeft<6){
+		if (historyLeft < 6) {
 			historyLeft++;
 		}
 		System.out.println("commited. pointer= " + historyPointer);
-		
+
 	}
 
 	public void undoAction() {
 		Graphics graphics = canvas.getImage().getGraphics();
 
-	if(historyLeft>0){
-		//8 to 1
-		if (historyPointer ==0) {
-			graphics.drawImage( history[history.length-2], 0,
-					0, null);
-			historyPointer=history.length-2;
+		if (historyLeft > 0) {
+			// 8 to 1
+			if (historyPointer == 0) {
+				graphics.drawImage(history[history.length - 2], 0, 0, null);
+				historyPointer = history.length - 2;
 
-			//is 0
-		} 
-		else if (historyPointer==1){
-			graphics.drawImage( history[history.length-1], 0,
-					0, null);
-			historyPointer=history.length-1;
+				// is 0
+			} else if (historyPointer == 1) {
+				graphics.drawImage(history[history.length - 1], 0, 0, null);
+				historyPointer = history.length - 1;
 
-		}else{
-			graphics.drawImage( history[historyPointer-2], 0,
-					0, null);
-			historyPointer--;
+			} else {
+				graphics.drawImage(history[historyPointer - 2], 0, 0, null);
+				historyPointer--;
+			}
+			historyLeft--;
+
 		}
-		historyLeft--;
 
-	}
-		
 		System.out.println("undid. pointer= " + historyPointer);
-	
+
 		canvas.repaint();
 
 	}
 
 	public void rotateCanvas() {
 		BufferedImage image = canvas.getImage();
-		int degrees=90;
+		int degrees = 90;
 		AffineTransform transform = AffineTransform.getRotateInstance(
 				Math.toRadians(degrees), image.getWidth() / 2,
 				image.getHeight() / 2);
@@ -199,22 +212,23 @@ public class DrawListener implements MouseListener, MouseMotionListener {
 				AffineTransformOp.TYPE_BILINEAR);
 		Graphics graphics = canvas.getImage().getGraphics();
 		graphics.drawImage(atransform.filter(image, null), 0, 0,
-				canvas.getWidth(),canvas.getHeight(), null);
+				canvas.getWidth(), canvas.getHeight(), null);
 		canvas.repaint();
 	}
 
 	public void setThickness(int thick) {
-	this.thick=thick;
-		
+		this.thick = thick;
+
 	}
 
 	public void resizeCanvas() {
-		
-		BufferedImage image=new BufferedImage(canvas.getWidth(),canvas.getHeight(),BufferedImage.TYPE_INT_RGB);
-		Graphics tempGraphics=image.getGraphics();
+
+		BufferedImage image = new BufferedImage(canvas.getWidth(),
+				canvas.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics tempGraphics = image.getGraphics();
 		tempGraphics.setColor(Color.WHITE);
 		tempGraphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		tempGraphics.drawImage(canvas.getImage(), 0,0, null);
+		tempGraphics.drawImage(canvas.getImage(), 0, 0, null);
 		canvas.setImage(image);
 		canvas.repaint();
 	}

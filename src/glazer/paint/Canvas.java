@@ -9,16 +9,17 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel {
 
-
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private BrushListener listener;
+
 
 	private BufferedImage image;
 
 	public Canvas(int width, int height) {
+		listener=new PencilListener();
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics graphics = image.getGraphics();
 		graphics.setColor(Color.WHITE);
@@ -32,6 +33,7 @@ public class Canvas extends JPanel {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, null);
+		listener.draw(g);
 	}
 
 	public BufferedImage getImage() {
@@ -41,5 +43,11 @@ public class Canvas extends JPanel {
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}
+	public BrushListener getListener() {
+		return listener;
+	}
 
+	public void setListener(BrushListener listener) {
+		this.listener = listener;
+	}
 }
