@@ -106,6 +106,7 @@ public class Canvas extends JPanel {
 
 	public void commitHistory(BufferedImage image) {
 		// pointer is next one to undo
+		//holds 8 memory locations
 		// +1 is where commit next image
 		// pointer is <=6
 		if (historyPointer < history.length) {
@@ -119,7 +120,6 @@ public class Canvas extends JPanel {
 		if (historyLeft < 6) {
 			historyLeft++;
 		}
-		System.out.println("commited. pointer= " + historyPointer);
 
 	}
 
@@ -144,8 +144,6 @@ public class Canvas extends JPanel {
 			historyLeft--;
 
 		}
-
-		System.out.println("undid. pointer= " + historyPointer);
 
 		repaint();
 
