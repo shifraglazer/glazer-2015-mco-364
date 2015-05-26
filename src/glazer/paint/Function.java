@@ -1,6 +1,20 @@
 package glazer.paint;
 
-public interface Function {
+import java.awt.Color;
 
-	public void perform(int x, int y);
+import javax.swing.JButton;
+
+public abstract class  Function extends JButton{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	protected Canvas canvas;
+	public Function (Canvas canvas){
+		this.canvas=canvas;
+		setOpaque(false);
+		setBackground(Color.WHITE);
+	}
+	public abstract void perform();
 }
